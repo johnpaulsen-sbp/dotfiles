@@ -1,5 +1,7 @@
 # Repo-level metadata files — should not be applied to the home directory.
-README.md
-LICENSE
-NOTES.md
-.github
+# Leading slash anchors to the source root, so nested README/LICENSE files
+# (e.g. dot_claude/README.md) are still tracked and deployed.
+/README.md
+/LICENSE
+/NOTES.md
+/.github
