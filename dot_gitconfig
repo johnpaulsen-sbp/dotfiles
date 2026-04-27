@@ -1,0 +1,13 @@
+# Identity is intentionally NOT set globally — must be set explicitly per repo.
+# This avoids accidentally committing under the wrong identity (e.g. work vs. personal).
+#
+# To set identity for a single repo (run inside the repo):
+#   git config user.name "John Paulsen"
+#   git config user.email "john@gopaulsen.com"
+#
+# Or use conditional includes for per-directory identity. Example:
+#   [includeIf "gitdir:~/work/"]
+#     path = ~/.gitconfig-work
+#   [includeIf "gitdir:~/personal/"]
+#     path = ~/.gitconfig-personal
+# See: https://git-scm.com/docs/git-config#_conditional_includes

@@ -1,4 +1,5 @@
 # Repo-level metadata files — should not be applied to the home directory.
 README.md
 LICENSE
+NOTES.md
 .github
