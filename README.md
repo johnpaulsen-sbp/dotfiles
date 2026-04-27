@@ -8,7 +8,7 @@ Personal dotfiles managed with [chezmoi](https://chezmoi.io). Currently focused 
 |---|---|---|
 | `dot_claude/settings.json` | `~/.claude/settings.json` | Claude Code user settings (theme, model, status line) |
 | `dot_claude/executable_statusline.sh` | `~/.claude/statusline.sh` (executable) | Custom status line — model, dir, git branch, context %, 5h + weekly rate-limit %, cost, duration |
-| `dot_claude/skills/grill-me/SKILL.md` | `~/.claude/skills/grill-me/SKILL.md` | Skill that has the agent interview me about a plan until we share understanding |
+| `dot_claude/skills/<name>/` | `~/.claude/skills/<name>/` | Vendored skills from [mattpocock/skills](https://github.com/mattpocock/skills). See Attribution below for the current set. |
 | `dot_gitconfig` | `~/.gitconfig` | Global git config (deliberately omits `[user]` — identity is set per-repo) |
 
 > 📝 See [NOTES.md](NOTES.md) for in-progress work that's pending on specific machines (MacBook zshrc, Linux laptop migration from oh-my-zsh).
