@@ -4,30 +4,21 @@ A scratchpad for cross-machine work that hasn't landed yet. The Claude agent on 
 
 ---
 
-## 🍎 On the MacBook — start here (highest priority)
+## ~~🍎 On the MacBook~~ — DONE
 
-**Goal:** add my MacBook zshrc and starship config to this dotfiles repo. The MacBook zshrc is the most current/relevant one I have right now.
+**Completed.** MacBook zshrc and starship config landed in commit `13b03c5`.
 
-### Steps
+### What was done
 
-1. **Bootstrap chezmoi** (no `--apply` yet — we want to add new files first, not pull existing ones):
-   ```bash
-   sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin
-   ~/.local/bin/chezmoi init johnpaulsen-sbp
-   chezmoi cd                          # jumps into ~/.local/share/chezmoi
-   ```
-
-2. **Track the current zshrc and starship config:**
-   ```bash
-   chezmoi add ~/.zshrc
-   chezmoi add ~/.config/starship.toml    # or wherever it lives
-   ```
-
-3. **Audit for hardcoded paths.** Open the staged file in the source dir and look for absolutes under `/Users/john/...`. Replace each with `$HOME` (in shell scripts) or with a chezmoi template variable. If any line is genuinely path-bound (e.g. a `source /Users/.../foo.sh`), convert the file to a chezmoi template by renaming `dot_zshrc` → `dot_zshrc.tmpl` and using `{{ .chezmoi.homeDir }}`.
-
-4. **OS-specific blocks need templating.** Anything zshrc does that's macOS-only (Homebrew paths under `/opt/homebrew/`, `pbcopy`, etc.) must be wrapped so it doesn't break on Linux. See the README's "Cross-OS templating" section for syntax.
-
-5. **Commit and push** so the Linux laptop session can pull it.
+- Bootstrapped chezmoi, added `~/.zshrc` and `~/.config/starship.toml`
+- Converted `dot_zshrc` → `dot_zshrc.tmpl` with cross-OS templating:
+  - Homebrew PATH gated on `darwin`
+  - pnpm home: `~/Library/pnpm` on macOS, `~/.local/share/pnpm` on Linux
+  - Zsh plugin paths: Homebrew (macOS), `/usr/share/zsh/plugins/` (Manjaro), `[ -f ] && source` guards (Debian/Ubuntu/Fedora)
+  - Hardcoded `/Users/jpaulsen` replaced with `{{ .chezmoi.homeDir }}`
+- Starship config is OS-agnostic TOML — no templating needed
+- Removed dead commented-out bun lines
+- Added `[ -f ~/.zshrc.local ] && source ~/.zshrc.local` as per-machine escape hatch
 
 ### Decision recorded
 
@@ -59,7 +50,11 @@ These are short-lived enough that hardcoding `chezmoi init --apply johnpaulsen-s
 
 ---
 
+## Decisions made
+
+- **Per-machine overrides.** Resolved: templating for tracked OS-specific stuff, `~/.zshrc.local` (chezmoi-ignored, sourced at end of `.zshrc`) as escape hatch for truly per-machine items. The `source` line is already in the template; create the file on any machine that needs it.
+
 ## Open questions / not-yet-decided
 
-- **Per-machine overrides.** Pattern question: do we want a separate `~/.zshrc.local` (chezmoi-ignored, machine-specific) sourced at the end of `.zshrc` for per-machine tweaks/secrets? Or always go via templating? My current lean: templating for tracked stuff, `.zshrc.local` as an escape hatch for truly per-machine items. Decide when we hit a real case.
-- **Where do shell aliases live** when we get them? `.zshrc` directly, or a separate `.aliases` sourced from `.zshrc`? Decide once the MacBook zshrc lands and we can see the volume.
+- **Where do shell aliases live** when we get them? `.zshrc` directly, or a separate `.aliases` sourced from `.zshrc`? The current MacBook zshrc has almost no aliases (just a commented-out example), so deferring until there's real volume.
+- **`Option+Arrow` keybindings.** The zshrc binds `^[[1;3C`/`^[[1;3D` for word-jump — these are macOS Terminal/iTerm2 escape sequences. Most Linux terminals send the same codes, but if word-jump breaks on a specific Linux terminal, this may need per-OS templating.

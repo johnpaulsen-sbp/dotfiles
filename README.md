@@ -1,11 +1,13 @@
 # dotfiles
 
-Personal dotfiles managed with [chezmoi](https://chezmoi.io). Currently focused on my Claude Code setup, with more to come as I add machines (Linux laptop, MacBook, VMs, containers).
+Personal dotfiles managed with [chezmoi](https://chezmoi.io). Covers zsh + starship prompt, Claude Code config, and git identity across macOS (MacBook), Manjaro, Debian, Ubuntu, and Fedora.
 
 ## What's tracked
 
 | Source | Lands at | Purpose |
 |---|---|---|
+| `dot_zshrc.tmpl` | `~/.zshrc` | Zsh config (templated) — cross-OS plugin paths, Homebrew, pnpm, starship init, `~/.zshrc.local` escape hatch |
+| `dot_config/starship.toml` | `~/.config/starship.toml` | Starship prompt — Tokyo Night theme, OS symbols, language modules, cmd duration, vi-mode indicators |
 | `dot_claude/` (whole tree) | `~/.claude/` | Claude Code user config — see [`dot_claude/README.md`](dot_claude/README.md) for the inside view |
 | `dot_claude/settings.json` | `~/.claude/settings.json` | theme, model, status line, hook registration |
 | `dot_claude/executable_statusline.sh` | `~/.claude/statusline.sh` (executable) | Custom status line (Python) — model, dir, git branch, context %, 5h + weekly rate-limit %, cost, duration |
@@ -13,7 +15,7 @@ Personal dotfiles managed with [chezmoi](https://chezmoi.io). Currently focused 
 | `dot_claude/skills/<name>/` | `~/.claude/skills/<name>/` | 11 vendored skills from [mattpocock/skills](https://github.com/mattpocock/skills) — see Skills section below |
 | `dot_gitconfig` | `~/.gitconfig` | Global git config (deliberately omits `[user]` so identity is set per-repo) |
 
-> 📝 See [NOTES.md](NOTES.md) for in-progress work pending on specific machines (MacBook zshrc + starship, Linux laptop migration off oh-my-zsh).
+> 📝 See [NOTES.md](NOTES.md) for in-progress work on specific machines (Linux laptop migration off oh-my-zsh is next).
 
 ## Setup on a fresh machine
 
