@@ -82,12 +82,7 @@ The hook is intentional. Don't fight it; that's the point.
 
 ## Identity convention
 
-`~/.gitconfig` deliberately omits `[user]`. Every repo must set identity locally:
-
-```bash
-git config user.name "John Paulsen"
-git config user.email "john@gopaulsen.com"
-```
+`~/.gitconfig` deliberately omits `[user]`. Every repo must set identity locally.
 
 Or use conditional includes (`includeIf "gitdir:..."`) for per-directory identity — the live gitconfig has commented examples.
 
