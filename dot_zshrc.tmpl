@@ -1,0 +1,86 @@
+# ============================================
+# PATH Configuration
+# ============================================
+{{- if eq .chezmoi.os "darwin" }}
+# Homebrew (Apple Silicon)
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+{{- end }}
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# pnpm
+{{- if eq .chezmoi.os "darwin" }}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/Library/pnpm"
+{{- else }}
+export PNPM_HOME="{{ .chezmoi.homeDir }}/.local/share/pnpm"
+{{- end }}
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# ============================================
+# History Configuration (native zsh)
+# ============================================
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt EXTENDED_HISTORY          # Write timestamp to history
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion
+setopt SHARE_HISTORY             # Share history between all sessions
+
+# Treat /, -, _ as word separators for Option+Arrow navigation
+WORDCHARS=''
+
+# ============================================
+# Plugins
+# ============================================
+# Define keybindings to restore after vi-mode loads
+function zvm_after_init() {
+  bindkey "^[[1;3C" forward-word
+  bindkey "^[[1;3D" backward-word
+}
+
+# Load vi-mode first
+{{- if eq .chezmoi.os "darwin" }}
+source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+{{- else if eq .chezmoi.osRelease.id "manjaro" }}
+source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+{{- else }}
+# Debian/Ubuntu/Fedora: install zsh-vi-mode to this path or adjust
+[ -f /usr/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh ] && source /usr/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+{{- end }}
+
+# Load autosuggestions
+{{- if eq .chezmoi.os "darwin" }}
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+{{- else if eq .chezmoi.osRelease.id "manjaro" }}
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+{{- else }}
+[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+{{- end }}
+
+# Load syntax highlighting LAST
+{{- if eq .chezmoi.os "darwin" }}
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+{{- else if eq .chezmoi.osRelease.id "manjaro" }}
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+{{- else }}
+[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+{{- end }}
+
+# ============================================
+# Prompt (must be last)
+# ============================================
+eval "$(starship init zsh)"
+
+# ============================================
+# Aliases (add your own here)
+# ============================================
+# alias zshconfig="nvim ~/.zshrc"
+
+# Source machine-local overrides if present (not tracked by chezmoi)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
